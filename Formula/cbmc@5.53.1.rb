@@ -6,6 +6,16 @@ class CbmcAT5531 < Formula
       revision: "4987df3c306b6ea9e26933aa240fbc8a62fbbc7a"
   license "BSD-4-Clause"
 
+  bottle do
+    root_url "https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "9d346c09394cfe3711dd5ada08338c2cc1886a2c4d789eb70f9600a63361fcde"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "4e9e3e769dfd1417f4ad8e0822770c654aabbcb74025377813fdb9d13661e7c3"
+    sha256 cellar: :any_skip_relocation, monterey:       "2ced9dc21f4f69bb37a7ae299e38dc8e06fd41a870d4ed0daf68911db2cb2b3d"
+    sha256 cellar: :any_skip_relocation, big_sur:        "4d3b4d9f1539ec7d5694e741a02216adfc50e55d51bc4cec69957b0ae2bdb6ac"
+    sha256 cellar: :any_skip_relocation, catalina:       "a98eed357c861c8b82246b5768be2b09c07c32a9528666ca51d71146477f454e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "70b111764d32c01b78863c7d01e594d62105986d6301466261f3b2fe9babb2ae"
+  end
+
   depends_on "cmake" => :build
   depends_on "maven" => :build
   depends_on "openjdk" => :build
