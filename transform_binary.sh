@@ -16,10 +16,10 @@ do
         BOTTLE_NAME+="tar.gz"
 
         tar -xzf $BOTTLE_NAME
-        mv cbmc cbmc-$1
-        sed -iu 's/class Cbmc/class CbmcAT5610/g' cbmc-$1/$1/.brew/cbmc.rb
-        tar czf cbmc-$1-$TAG.bottle.tar.gz cbmc-$1
-        rm -rf cbmc-$1
+        mv cbmc cbmc@$1
+        sed -iu 's/class Cbmc/class CbmcAT5610/g' cbmc@$1/$1/.brew/cbmc.rb
+        tar czf cbmc-$1-$TAG.bottle.tar.gz cbmc@$1
+        rm -rf cbmc@$1
         SHA=$(shasum -a 256 cbmc-$1-$TAG.bottle.tar.gz)
         echo "$SHA"
     elif [[ $OUTPUT =~ $pat2 ]]; then
@@ -27,10 +27,10 @@ do
         BOTTLE_NAME+="tar.gz"
 
         tar -xzf $BOTTLE_NAME
-        mv cbmc cbmc-$1
-        sed -iu 's/class Cbmc/class CbmcAT5610/g' cbmc-$1/$1/.brew/cbmc.rb
-        tar czf cbmc-$1-$TAG.bottle.tar.gz cbmc-$1
-        rm -rf cbmc-$1
+        mv cbmc cbmc@$1
+        sed -iu 's/class Cbmc/class CbmcAT5610/g' cbmc@$1/$1/.brew/cbmc.rb
+        tar czf cbmc-$1-$TAG.bottle.tar.gz cbmc@$1
+        rm -rf cbmc@$1
         SHA=$(shasum -a 256 cbmc-$1-$TAG.bottle.tar.gz)
         echo "$SHA"
     fi

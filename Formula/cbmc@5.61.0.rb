@@ -8,12 +8,12 @@ class CbmcAT5610 < Formula
 
   bottle do
     root_url "https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "377394c75753425e104ceb99bf8c53e558307ef891fb94eb6ba6723057933a19"
-    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "f9e9cb04342e90c800015d63b28e5c7a856ed2f9ba7765707299b4f20e93ab88"
-    sha256 cellar: :any_skip_relocation, monterey:       "72a8909ea45f296c537cab0f5369feb898df5bfc3a2668d3e22af2be301e2da7"
-    sha256 cellar: :any_skip_relocation, big_sur:        "d10e75b2f0e0795761dcc9ad5d3760dbbb664eda7ca047666a600d831d96fc1f"
-    sha256 cellar: :any_skip_relocation, catalina:       "4ba7a18f2b9eb5657ad3d33236a6b30051946b7d0f9bc642a97fac7a6c942fe4"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "8b69a0e4085ecad9efee7e84a8e7b1705d5c8a17892c9dc19662528b43f16918"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "d4fdb2d57c22db2f6ac4cc283a1919fd252dc6c48e8b4a7105ffeebad135315c"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "ade48450854303181eddead160e7c013ebcf31cb4a8480bb706ae1d387a2f58d"
+    sha256 cellar: :any_skip_relocation, monterey:       "c4b4d89374036136282afd4930cf40729562aabbbcd86fd04b35c4865c127115"
+    sha256 cellar: :any_skip_relocation, big_sur:        "a33f8c3d7bcc587b3abc6ffa1d0b45e61f77142edf01d03af6456cd39c3b8597"
+    sha256 cellar: :any_skip_relocation, catalina:       "0b803cf1e86687301b7313681112ed0aa263b12706ab2b3e46fd7f93eb3a0bf3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "f4f1537dae8018ebb26667964d0c88cfc55896e9513d459f7098472ac643ee22"
   end
 
   depends_on "cmake" => :build
