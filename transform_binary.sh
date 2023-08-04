@@ -12,9 +12,11 @@ CBMC_STRING="CbmcAT"
 VERSION_PROCESSED="${VERSION//./}"
 FORMULA_VERSION="$CBMC_STRING$VERSION_PROCESSED"
 
+echo "bottle do"
+echo "  root_url \"https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies\""
 for TAG in "arm64_ventura" "arm64_monterey" "arm64_big_sur" "ventura" "monterey" "big_sur" "x86_64_linux"
 do
-    echo "Processing bottle for $VERSION -- $TAG"
+    #echo "Processing bottle for $VERSION -- $TAG"
     OUTPUT=$(brew fetch cbmc --bottle-tag=$TAG)
     OUTPUT=$(echo "$OUTPUT" | tail -n -2)
 
@@ -30,8 +32,10 @@ do
         sed -iu "s/class Cbmc/class $FORMULA_VERSION/g" cbmc@$1/$1/.brew/cbmc.rb
         tar czf cbmc@$1-$1.$TAG.bottle.tar.gz cbmc@$1
         rm -rf cbmc@$1
-        SHA=$(shasum -a 256 cbmc@$1-$1.$TAG.bottle.tar.gz)
-        echo "$SHA"
+        #SHA=$(shasum -a 256 cbmc@$1-$1.$TAG.bottle.tar.gz)
+        #echo "$SHA"
+        LINE="  sha256 cellar: :any_skip_relocation, $TAG: \"$(shasum -a 256 cbmc@$1-$1.$TAG.bottle.tar.gz | awk '{print $1}')\""
+        echo "$LINE"
     elif [[ $OUTPUT =~ $pat2 ]]; then
         BOTTLE_NAME=${BASH_REMATCH[1]}
         BOTTLE_NAME+="tar.gz"
@@ -41,7 +45,10 @@ do
         sed -iu "s/class Cbmc/class $FORMULA_VERSION/g" cbmc@$1/$1/.brew/cbmc.rb
         tar czf cbmc@$1-$1.$TAG.bottle.tar.gz cbmc@$1
         rm -rf cbmc@$1
-        SHA=$(shasum -a 256 cbmc@$1-$1.$TAG.bottle.tar.gz)
-        echo "$SHA"
+        #SHA=$(shasum -a 256 cbmc@$1-$1.$TAG.bottle.tar.gz)
+        #echo "$SHA"
+        LINE="  sha256 cellar: :any_skip_relocation, $TAG: \"$(shasum -a 256 cbmc@$1-$1.$TAG.bottle.tar.gz | awk '{print $1}')\""
+        echo "$LINE"
     fi
 done
+echo end
