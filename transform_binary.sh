@@ -14,7 +14,7 @@ FORMULA_VERSION="$CBMC_STRING$VERSION_PROCESSED"
 
 echo "bottle do"
 echo "  root_url \"https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies\""
-for TAG in "arm64_ventura" "arm64_monterey" "arm64_big_sur" "ventura" "monterey" "big_sur" "x86_64_linux"
+for TAG in "arm64_sonoma" "arm64_ventura" "arm64_monterey" "sonoma" "ventura" "monterey" "x86_64_linux"
 do
     #echo "Processing bottle for $VERSION -- $TAG"
     OUTPUT=$(brew fetch cbmc --bottle-tag=$TAG)
