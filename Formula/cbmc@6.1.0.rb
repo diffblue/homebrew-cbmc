@@ -1,4 +1,4 @@
-class CbmcAT601 < Formula
+class CbmcAT610 < Formula
   desc "C Bounded Model Checker"
   homepage "https://www.cprover.org/cbmc/"
   url "https://github.com/diffblue/cbmc.git",
