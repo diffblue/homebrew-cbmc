@@ -2,7 +2,7 @@ class CbmcAT610 < Formula
   desc "C Bounded Model Checker"
   homepage "https://www.cprover.org/cbmc/"
   url "https://github.com/diffblue/cbmc.git",
-    tag:      "cbmc-6.1.0",
+      tag:      "cbmc-6.1.0",
       revision: "737d5826d29df048493b88caad9b70aa217db687"
   license "BSD-4-Clause"
 
