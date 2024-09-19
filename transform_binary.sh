@@ -25,28 +25,22 @@ do
 
     if [[ ${OUTPUT} =~ ${pat1} ]]; then
         BOTTLE_NAME=${BASH_REMATCH[1]}
-        BOTTLE_NAME+="tar.gz"
-
-        tar -xzf "${BOTTLE_NAME}"
-        mv cbmc cbmc@"${VERSION}"
-        sed -iu "s/class Cbmc/class ${FORMULA_VERSION}/g" "cbmc@${VERSION}/${VERSION}/.brew/cbmc.rb"
-        tar czf "cbmc@${VERSION}-${VERSION}.${TAG}.bottle.tar.gz" cbmc@"${VERSION}"
-        rm -rf cbmc@"${VERSION}"
-        SHA=$(shasum -a 256 "cbmc@${VERSION}-${VERSION}.$TAG.bottle.tar.gz" | awk '{print $1}')
-        LINE="  sha256 cellar: :any_skip_relocation, $TAG: \"${SHA}\""
-        echo "${LINE}"
     elif [[ ${OUTPUT} =~ ${pat2} ]]; then
         BOTTLE_NAME=${BASH_REMATCH[1]}
-        BOTTLE_NAME+="tar.gz"
-
-        tar -xzf "${BOTTLE_NAME}"
-        mv cbmc cbmc@"${VERSION}"
-        sed -iu "s/class Cbmc/class $FORMULA_VERSION/g" "cbmc@${VERSION}/${VERSION}/.brew/cbmc.rb"
-        tar czf "cbmc@${VERSION}-${VERSION}.${TAG}.bottle.tar.gz" cbmc@"${VERSION}"
-        rm -rf cbmc@"${VERSION}"
-        SHA=$(shasum -a 256 "cbmc@${VERSION}-${VERSION}.$TAG.bottle.tar.gz" | awk '{print $1}')
-        LINE="  sha256 cellar: :any_skip_relocation, $TAG: \"${SHA}\""
-        echo "${LINE}"
+    else
+        continue
     fi
+
+    BOTTLE_NAME+="tar.gz"
+
+    tar -xzf "${BOTTLE_NAME}"
+    mv cbmc cbmc@"${VERSION}"
+    sed -iu "s/class Cbmc/class ${FORMULA_VERSION}/g" "cbmc@${VERSION}/${VERSION}/.brew/cbmc.rb"
+    tar czf "cbmc@${VERSION}-${VERSION}.${TAG}.bottle.tar.gz" cbmc@"${VERSION}"
+    rm -rf cbmc@"${VERSION}"
+    SHA=$(shasum -a 256 "cbmc@${VERSION}-${VERSION}.${TAG}.bottle.tar.gz")
+    TAG_SPACED=$(printf "%-60s" "  sha256 cellar: :any_skip_relocation, ${TAG}:")
+    LINE="${TAG_SPACED}\"${SHA%%[[:space:]]*}\""
+    echo "${LINE}"
 done
 echo end
