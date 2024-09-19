@@ -8,13 +8,13 @@ class CbmcAT5930 < Formula
 
   bottle do
     root_url "https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "853e3ebba7f249f6240954e65b0802e2b08f2114301ca461d3ce27417af32e3c"
-    sha256 cellar: :any_skip_relocation, arm64_ventura: "091b548aa6550022348be557f99951216f5c4255397975bc681d45d7b394302b"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "853e3ebba7f249f6240954e65b0802e2b08f2114301ca461d3ce27417af32e3c"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "091b548aa6550022348be557f99951216f5c4255397975bc681d45d7b394302b"
     sha256 cellar: :any_skip_relocation, arm64_monterey: "2624ab204220da50ae31f682c267fd46de87ae33fd014819f61598715f93493d"
-    sha256 cellar: :any_skip_relocation, sonoma: "e5f308a74ea94e8049aa5c0a90cef52c97e40ab22260d838c67ba420cfc1a38e"
-    sha256 cellar: :any_skip_relocation, ventura: "4e7b32a03f293874fb3fc72885a1cad73912522d33b389792dcfaae6878c6c1c"
-    sha256 cellar: :any_skip_relocation, monterey: "d627a208d03c9b2b641094b3784eeeea8be508e88f5376cda7720df8a88d463d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "472abc801f35a9f786e8d260d2656bc1a60c4064b986a73e1ef9bc4f17e56e75"
+    sha256 cellar: :any_skip_relocation, sonoma:         "e5f308a74ea94e8049aa5c0a90cef52c97e40ab22260d838c67ba420cfc1a38e"
+    sha256 cellar: :any_skip_relocation, ventura:        "4e7b32a03f293874fb3fc72885a1cad73912522d33b389792dcfaae6878c6c1c"
+    sha256 cellar: :any_skip_relocation, monterey:       "d627a208d03c9b2b641094b3784eeeea8be508e88f5376cda7720df8a88d463d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "472abc801f35a9f786e8d260d2656bc1a60c4064b986a73e1ef9bc4f17e56e75"
   end
 
   depends_on "cmake" => :build
