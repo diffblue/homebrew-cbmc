@@ -23,15 +23,15 @@ jobs:
         run: |
           CBMC_LATEST=$(gh -R diffblue/cbmc release list | grep Latest | awk '{print $1}' | cut -f2 -d-)
           echo "CBMC_LATEST: ${CBMC_LATEST}"
-          echo "CBMC_LATEST=${CBMC_LATEST}" >> $GITHUB_ENV
+          echo "CBMC_LATEST=${CBMC_LATEST}" >> "${GITHUB_ENV}"
           # check whether we already have the formula
           if [ -e "Formula/cbmc@${CBMC_LATEST}.rb" ] ; then
-            echo "next_step=none" >> $GITHUB_ENV
+            echo "next_step=none" >> "${GITHUB_ENV}"
           else
             CBMC_LATEST_REV=$(gh -R diffblue/cbmc release view cbmc-"${CBMC_LATEST}" --json targetCommitish | jq -r '.targetCommitish')
             echo "CBMC_LATEST_REV: ${CBMC_LATEST_REV}"
-            echo "CBMC_LATEST_REV=${CBMC_LATEST_REV}" >> $GITHUB_ENV
-            echo "next_step=check_brew" >> $GITHUB_ENV
+            echo "CBMC_LATEST_REV=${CBMC_LATEST_REV}" >> "${GITHUB_ENV}"
+            echo "next_step=check_brew" >> "${GITHUB_ENV}"
           fi
 
       - name: Set up Homebrew
@@ -44,8 +44,8 @@ jobs:
           brew update
           CBMC_BREW=$(brew info cbmc --json | jq -r '.[0].versions.stable')
           echo "CBMC_BREW: ${CBMC_BREW}"
-          if [ "x${CBMC_BREW}" = "x${CBMC_LATEST}" ] ; then
-            formula_base=$(ls Formula | tail -1)
+          if [ "${CBMC_BREW}" = "${CBMC_LATEST}" ] ; then
+            formula_base=$(find Formula/ -type f | sort | tail -1)
             sed '/bottle do/Q' "Formula/${formula_base}" > "Formula/cbmc@${CBMC_LATEST}.rb"
             version_no_dot=$(echo "${CBMC_LATEST}" | sed 's/\.//g')
             sed -i "1s/CbmcAT[[:digit:]]*/CbmcAT${version_no_dot}/" "Formula/cbmc@${CBMC_LATEST}.rb"
@@ -53,9 +53,9 @@ jobs:
             sed -i "6s/\".*\"/\"cbmc-${CBMC_LATEST_REV}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
             ./transform_binary.sh "${CBMC_LATEST}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
             sed -n '1,/end$/!p' "Formula/${formula_base}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
-            echo "next_step=upload_and_create_pr" >> $GITHUB_ENV
+            echo "next_step=upload_and_create_pr" >> "${GITHUB_ENV}"
           else
-            echo "next_step=none" >> $GITHUB_ENV
+            echo "next_step=none" >> "${GITHUB_ENV}"
           fi
 
       - name: Upload bottles
