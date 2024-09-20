@@ -42,7 +42,7 @@ do
   tar czf "cbmc@${VERSION}-${VERSION}.${TAG}.bottle.tar.gz" cbmc@"${VERSION}"
   rm -rf cbmc@"${VERSION}"
   SHA=$(shasum -a 256 "cbmc@${VERSION}-${VERSION}.${TAG}.bottle.tar.gz")
-  TAG_SPACED=$(printf "%-60s" "  sha256 cellar: :any_skip_relocation, ${TAG}:")
+  TAG_SPACED=$(printf "%-60s" "    sha256 cellar: :any_skip_relocation, ${TAG}:")
   LINE="${TAG_SPACED}\"${SHA%%[[:space:]]*}\""
   echo "${LINE}"
 done
