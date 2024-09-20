@@ -61,7 +61,7 @@ jobs:
         if: ${{ env.next_step == 'upload_and_create_pr' }}
         uses: softprops/action-gh-release@v2
         with:
-          name: bag-of-goodies
+          tag_name: bag-of-goodies
           files: cbmc@*.tar.gz
 
       - name: Create Pull Request
