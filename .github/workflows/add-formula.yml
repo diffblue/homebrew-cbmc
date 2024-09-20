@@ -46,12 +46,12 @@ jobs:
           echo "CBMC_BREW: ${CBMC_BREW}"
           if [ "${CBMC_BREW}" = "${CBMC_LATEST}" ] ; then
             formula_base=$(find Formula/ -type f | sort | tail -1)
-            sed '/bottle do/Q' "Formula/${formula_base}" > "Formula/cbmc@${CBMC_LATEST}.rb"
+            sed '/bottle do/Q' "${formula_base}" > "Formula/cbmc@${CBMC_LATEST}.rb"
             sed -i "1s/CbmcAT[[:digit:]]*/CbmcAT${CBMC_LATEST//./}/" "Formula/cbmc@${CBMC_LATEST}.rb"
             sed -i "5s/\".*\"/\"cbmc-${CBMC_LATEST}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
             sed -i "6s/\".*\"/\"cbmc-${CBMC_LATEST_REV}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
             ./transform_binary.sh "${CBMC_LATEST}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
-            sed -n '1,/end$/!p' "Formula/${formula_base}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
+            sed -n '1,/end$/!p' "${formula_base}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
             echo "next_step=upload_and_create_pr" >> "${GITHUB_ENV}"
           else
             echo "next_step=none" >> "${GITHUB_ENV}"
