@@ -47,8 +47,7 @@ jobs:
           if [ "${CBMC_BREW}" = "${CBMC_LATEST}" ] ; then
             formula_base=$(find Formula/ -type f | sort | tail -1)
             sed '/bottle do/Q' "Formula/${formula_base}" > "Formula/cbmc@${CBMC_LATEST}.rb"
-            version_no_dot=$(echo "${CBMC_LATEST}" | sed 's/\.//g')
-            sed -i "1s/CbmcAT[[:digit:]]*/CbmcAT${version_no_dot}/" "Formula/cbmc@${CBMC_LATEST}.rb"
+            sed -i "1s/CbmcAT[[:digit:]]*/CbmcAT${CBMC_LATEST//./}/" "Formula/cbmc@${CBMC_LATEST}.rb"
             sed -i "5s/\".*\"/\"cbmc-${CBMC_LATEST}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
             sed -i "6s/\".*\"/\"cbmc-${CBMC_LATEST_REV}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
             ./transform_binary.sh "${CBMC_LATEST}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
