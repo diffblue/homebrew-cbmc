@@ -27,6 +27,9 @@ jobs:
           # check whether we already have the formula
           if [ -e "Formula/cbmc@${CBMC_LATEST}.rb" ] ; then
             echo "next_step=none" >> "${GITHUB_ENV}"
+          # check whether we already have a PR for the formula
+          elif ! git ls-remote --exit-code origin "cbmc-${CBMC_LATEST}" ; then
+            echo "next_step=none" >> "${GITHUB_ENV}"
           else
             CBMC_LATEST_REV=$(gh -R diffblue/cbmc release view cbmc-"${CBMC_LATEST}" --json targetCommitish | jq -r '.targetCommitish')
             echo "CBMC_LATEST_REV: ${CBMC_LATEST_REV}"
