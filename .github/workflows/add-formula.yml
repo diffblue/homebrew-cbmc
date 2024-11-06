@@ -26,9 +26,11 @@ jobs:
           echo "CBMC_LATEST=${CBMC_LATEST}" >> "${GITHUB_ENV}"
           # check whether we already have the formula
           if [ -e "Formula/cbmc@${CBMC_LATEST}.rb" ] ; then
+            echo "Formula already exists"
             echo "next_step=none" >> "${GITHUB_ENV}"
           # check whether we already have a PR for the formula
-          elif ! git ls-remote --exit-code origin "cbmc-${CBMC_LATEST}" ; then
+          elif git ls-remote --exit-code origin "cbmc-${CBMC_LATEST}" ; then
+            echo "Branch cbmc-${CBMC_LATEST} already exists"
             echo "next_step=none" >> "${GITHUB_ENV}"
           else
             CBMC_LATEST_REV=$(gh -R diffblue/cbmc release view cbmc-"${CBMC_LATEST}" --json targetCommitish | jq -r '.targetCommitish')
