@@ -15,26 +15,18 @@ FORMULA_VERSION="${CBMC_STRING}${VERSION_PROCESSED}"
 
 echo "  bottle do"
 echo "    root_url \"https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies\""
-for TAG in "arm64_sonoma" "arm64_ventura" "arm64_monterey" "sonoma" "ventura" "monterey" "x86_64_linux"
+for TAG in \
+  "arm64_sonoma" "arm64_ventura" "arm64_monterey" "arm64_tahoe" "arm64_sequoia" "arm64_linux" \
+  "sonoma" "ventura" "monterey" "x86_64_linux"
 do
   #echo "Processing bottle for $VERSION -- $TAG"
-  OUTPUT=$(brew fetch cbmc --bottle-tag="${TAG}")
-  OUTPUT=$(echo "${OUTPUT}" | tail -n -2)
+  brew fetch cbmc --bottle-tag="${TAG}"
+  BOTTLE_NAME=$(brew --cache cbmc --bottle-tag="${TAG}")
 
-  pat1='Downloaded to: (.*\.{1})(tgz|tar\.gz)'
-  pat2='Already downloaded: (.*\.{1})(tgz|tar\.gz)'
-
-  if [[ ${OUTPUT} =~ ${pat1} ]]
+  if [[ -z "${BOTTLE_NAME}" ]]
   then
-    BOTTLE_NAME=${BASH_REMATCH[1]}
-  elif [[ ${OUTPUT} =~ ${pat2} ]]
-  then
-    BOTTLE_NAME=${BASH_REMATCH[1]}
-  else
     continue
   fi
-
-  BOTTLE_NAME+="tar.gz"
 
   tar -xzf "${BOTTLE_NAME}"
   mv cbmc cbmc@"${VERSION}"
