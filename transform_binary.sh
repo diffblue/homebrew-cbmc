@@ -30,7 +30,7 @@ echo "    root_url \"https://github.com/diffblue/homebrew-cbmc/releases/download
 for TAG in "${TAGS[@]}"
 do
   #echo "Processing bottle for $VERSION -- $TAG"
-  brew fetch cbmc --bottle-tag="${TAG}" > /dev/null
+  brew fetch cbmc --bottle-tag="${TAG}" >/dev/null
   BOTTLE_NAME=$(brew --cache cbmc --bottle-tag="${TAG}")
 
   if [[ -z "${BOTTLE_NAME}" ]]
