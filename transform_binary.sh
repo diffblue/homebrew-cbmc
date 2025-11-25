@@ -18,10 +18,10 @@ TAGS=(
   "arm64_monterey"
   "arm64_tahoe"
   "arm64_sequoia"
-  "arm64_linux"
   "sonoma"
   "ventura"
   "monterey"
+  "arm64_linux"
   "x86_64_linux"
 )
 

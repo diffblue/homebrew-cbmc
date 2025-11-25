@@ -11,8 +11,8 @@ class CbmcAT680 < Formula
     sha256 cellar: :any_skip_relocation, arm64_sonoma:      "62cbb07e544442cab29c1982af3df7ad061aec28a2307d45359c82fbcd47d5c7"
     sha256 cellar: :any_skip_relocation, arm64_tahoe:       "50eb43834405961e997c6d7a9b5ea93eeeec7d91df4e28e9f88e0b6d012a2f99"
     sha256 cellar: :any_skip_relocation, arm64_sequoia:     "801bab15b77d02d387239b7f533c840e0cfe19d9cd3d89c6c576c486fbc4a5ee"
-    sha256 cellar: :any_skip_relocation, arm64_linux:       "ffd2deb57750b6ed293e7803aaa970d70eddeb62c1640ffe747e31ac3ac41683"
     sha256 cellar: :any_skip_relocation, sonoma:            "2b179fffc9826a85ac8a7de05a8d1d1c9c83439923ff0478c6fbf4e4e8676f8d"
+    sha256 cellar: :any_skip_relocation, arm64_linux:       "ffd2deb57750b6ed293e7803aaa970d70eddeb62c1640ffe747e31ac3ac41683"
     sha256 cellar: :any_skip_relocation, x86_64_linux:      "473f0ee5f97bf663a3a7750ea46185c88120a12c22427958620f9a3eeea6b703"
   end
 
