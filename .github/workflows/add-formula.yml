@@ -71,7 +71,7 @@ jobs:
 
       - name: Create Pull Request
         if: ${{ env.next_step == 'upload_and_create_pr' }}
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: Add formula for CBMC ${{ env.CBMC_LATEST }}
           add-paths: Formula/cbmc@*.rb
