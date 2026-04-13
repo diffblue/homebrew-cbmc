@@ -64,7 +64,7 @@ jobs:
 
       - name: Upload bottles
         if: ${{ env.next_step == 'upload_and_create_pr' }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: bag-of-goodies
           files: cbmc@*.tar.gz
