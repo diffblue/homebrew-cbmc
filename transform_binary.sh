@@ -32,11 +32,22 @@ FORMULA_VERSION="CbmcAT${VERSION//./}"
 ROOT_URL="https://github.com/diffblue/homebrew-cbmc/releases/download/bag-of-goodies"
 GHCR_REPO="homebrew/core/cbmc"
 
-CORE_RB="${CORE_RB:-$(brew formula cbmc)}"
-if [[ ! -f "${CORE_RB}" ]]
+# Locate Homebrew-core's cbmc formula. `brew formula` only yields a path when
+# the core tap is checked out locally; under Homebrew's default API mode (as on
+# CI) it prints nothing, so fall back to fetching the formula from GitHub.
+if [[ -z "${CORE_RB:-}" ]]
 then
-  echo >&2 "Fatal error: cannot locate Homebrew-core cbmc formula (CORE_RB=${CORE_RB})"
-  exit 2
+  CORE_RB="$(brew formula cbmc 2>/dev/null || true)"
+fi
+if [[ -z "${CORE_RB}" || ! -f "${CORE_RB}" ]]
+then
+  CORE_RB="$(mktemp)"
+  curl -fsSL "https://raw.githubusercontent.com/Homebrew/homebrew-core/master/Formula/c/cbmc.rb" -o "${CORE_RB}"
+fi
+if ! grep -q "tag:[[:space:]]*\"cbmc-${VERSION}\"" "${CORE_RB}"
+then
+  echo >&2 "Fatal error: Homebrew-core cbmc formula is not at version ${VERSION} (CORE_RB=${CORE_RB})"
+  exit 1
 fi
 
 # Obtain an anonymous pull token for the public Homebrew-core bottle registry.

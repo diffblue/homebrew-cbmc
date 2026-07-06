@@ -76,7 +76,12 @@ jobs:
           # ships. If it does not (e.g. Homebrew-core has not finished
           # publishing all bottles yet), abort so that a later scheduled run
           # retries, rather than opening a PR limited to a subset of platforms.
-          core_rb=$(brew formula cbmc)
+          # Count the bottle tags Homebrew-core ships. `brew formula` prints a
+          # path only when the core tap is checked out locally; under Homebrew's
+          # default API mode (as on CI) it prints nothing, so fetch the formula
+          # from GitHub instead.
+          core_rb="$(mktemp)"
+          curl -fsSL "https://raw.githubusercontent.com/Homebrew/homebrew-core/master/Formula/c/cbmc.rb" -o "${core_rb}"
           expected=$(grep -cE '^[[:space:]]+sha256 ' "${core_rb}")
           got=$(grep -cE '^[[:space:]]+sha256 ' "${formula}")
           echo "bottle tags: expected=${expected} got=${got}"
