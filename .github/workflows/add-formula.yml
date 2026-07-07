@@ -37,9 +37,6 @@ jobs:
             echo "Branch cbmc-${CBMC_LATEST} already exists"
             echo "next_step=none" >> "${GITHUB_ENV}"
           else
-            CBMC_LATEST_REV=$(gh -R diffblue/cbmc release view cbmc-"${CBMC_LATEST}" --json targetCommitish | jq -r '.targetCommitish')
-            echo "CBMC_LATEST_REV: ${CBMC_LATEST_REV}"
-            echo "CBMC_LATEST_REV=${CBMC_LATEST_REV}" >> "${GITHUB_ENV}"
             echo "next_step=check_brew" >> "${GITHUB_ENV}"
           fi
 
@@ -54,15 +51,10 @@ jobs:
           CBMC_BREW=$(brew info cbmc --json | jq -r '.[0].versions.stable')
           echo "CBMC_BREW: ${CBMC_BREW}"
           if [ "${CBMC_BREW}" = "${CBMC_LATEST}" ] ; then
-            formula_base=$(find Formula/ -type f | sort | tail -1)
-            sed '/bottle do/Q' "${formula_base}" > "Formula/cbmc@${CBMC_LATEST}.rb"
-            sed -i "1s/CbmcAT[[:digit:]]*/CbmcAT${CBMC_LATEST//./}/" "Formula/cbmc@${CBMC_LATEST}.rb"
-            sed -i "5s/\".*\"/\"cbmc-${CBMC_LATEST}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
-            # The revision is a plain git commit SHA - do not prefix it with
-            # "cbmc-" (that only belongs on the tag: line above).
-            sed -i "6s/\".*\"/\"${CBMC_LATEST_REV}\"/" "Formula/cbmc@${CBMC_LATEST}.rb"
-            ./transform_binary.sh "${CBMC_LATEST}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
-            sed -n '1,/end$/!p' "${formula_base}" >> "Formula/cbmc@${CBMC_LATEST}.rb"
+            # transform_binary.sh derives the complete formula from
+            # Homebrew-core's cbmc.rb (class name + re-hosted bottle block only)
+            # and leaves the re-hosted bottle tarballs in the working directory.
+            ./transform_binary.sh "${CBMC_LATEST}" > "Formula/cbmc@${CBMC_LATEST}.rb"
             echo "next_step=upload_and_create_pr" >> "${GITHUB_ENV}"
           else
             echo "next_step=none" >> "${GITHUB_ENV}"

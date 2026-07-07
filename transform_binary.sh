@@ -1,21 +1,30 @@
 #!/bin/bash
 
-# Generate the `bottle do` block for a versioned CBMC tap formula
-# (cbmc@<version>) by re-hosting Homebrew-core's own bottles.
+# Generate a complete versioned CBMC tap formula (cbmc@<version>) from
+# Homebrew-core's own cbmc formula, re-hosting its bottles.
 #
-# Rather than `brew fetch --bottle-tag=<tag>` (which only returns bottles for
-# the runner's *native* platform and silently skips all others), we take the
-# authoritative list of tags directly from Homebrew-core's cbmc formula and
-# download each bottle blob straight from the GitHub Packages (ghcr.io) OCI
-# registry. That works from any single runner (e.g. Linux) for every platform,
-# so the generated formula covers all architectures Homebrew-core ships.
+# The whole formula is derived from Homebrew-core's cbmc.rb verbatim, changing
+# only two things:
+#   * the class name (Cbmc -> CbmcAT<version>), and
+#   * the `bottle do` block: a `root_url` pointing at this tap's release is
+#     added and each bottle's sha256 is replaced with the re-hosted value.
+# Everything else (url/tag/revision, dependencies, install/test blocks, ...) is
+# copied as-is, so the tap formula can never drift from the upstream build
+# recipe.
 #
-# The bottle tar is repackaged so it unpacks under `cbmc@<version>/<version>`
-# (as a versioned formula requires) and its embedded formula class is renamed;
-# this changes the archive, so a fresh sha256 is computed per tag.
+# Bottles are downloaded straight from the GitHub Packages (ghcr.io) OCI
+# registry by digest, rather than via `brew fetch --bottle-tag=<tag>` (which
+# only returns bottles for the runner's *native* platform). That works from any
+# single runner (e.g. Linux) for every platform Homebrew-core ships. Each
+# bottle is repackaged so it unpacks under `cbmc@<version>/<version>` (as a
+# versioned formula requires) with its embedded class renamed, which changes
+# the archive, so a fresh sha256 is computed per tag.
+#
+# The generated formula is written to stdout; the re-hosted bottle tarballs are
+# left in the working directory for uploading.
 #
 # Environment overrides (used by tests):
-#   CORE_RB   path to Homebrew-core's cbmc.rb (default: `brew formula cbmc`)
+#   CORE_RB   path to Homebrew-core's cbmc.rb (default: located via brew/GitHub)
 
 set -euo pipefail
 
@@ -55,16 +64,6 @@ ghcr_token() {
   curl -fsSL "https://ghcr.io/token?service=ghcr.io&scope=repository:${GHCR_REPO}:pull" |
     sed -E 's/.*"token":"([^"]+)".*/\1/'
 }
-
-# Extract the bottle block from Homebrew-core's formula, keeping its canonical
-# ordering, per-tag `cellar:` values and formatting - we only substitute the
-# root_url and the (repackaged) sha256 values, so `brew style` stays happy.
-block=$(sed -n '/^  bottle do$/,/^  end$/p' "${CORE_RB}")
-if [[ -z "${block}" ]]
-then
-  echo >&2 "Fatal error: no bottle block found in ${CORE_RB}"
-  exit 1
-fi
 
 token=""
 
@@ -115,24 +114,41 @@ emit_line() {
   echo "${line}" | sed -E "s/\"[0-9a-f]+\"$/\"${sha}\"/"
 }
 
+# Emit the whole formula, transforming only the class name and bottle block.
+in_bottle=0
 while IFS= read -r line
 do
-  case "${line}" in
-    *"bottle do"*)
-      echo "  bottle do"
-      echo "    root_url \"${ROOT_URL}\""
-      ;;
-    *"root_url"*)
-      # Drop Homebrew-core's root_url; ours was emitted above.
-      ;;
-    *sha256*)
-      emit_line "${line}"
-      ;;
-    *"end"*)
-      echo "  end"
-      ;;
-    *)
-      echo "${line}"
-      ;;
-  esac
-done <<<"${block}"
+  if [[ ${in_bottle} -eq 0 && "${line}" == "  bottle do" ]]
+  then
+    in_bottle=1
+    echo "  bottle do"
+    echo "    root_url \"${ROOT_URL}\""
+    continue
+  fi
+  if [[ ${in_bottle} -eq 1 ]]
+  then
+    case "${line}" in
+      "  end")
+        in_bottle=0
+        echo "  end"
+        ;;
+      *root_url*)
+        # Drop any upstream root_url; ours was emitted above.
+        ;;
+      *sha256*)
+        emit_line "${line}"
+        ;;
+      *)
+        # Anything else inside the block (e.g. `rebuild`) is kept verbatim.
+        echo "${line}"
+        ;;
+    esac
+    continue
+  fi
+  if [[ "${line}" == "class Cbmc < Formula" ]]
+  then
+    echo "class ${FORMULA_VERSION} < Formula"
+  else
+    echo "${line}"
+  fi
+done <"${CORE_RB}"
